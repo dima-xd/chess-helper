@@ -1,9 +1,17 @@
-import { Coordinate } from "./coordinate";
+export enum Piece {
+    RookBlack,
+    KnightBlack,
+    BishopBlack,
+    QueenBlack,
+    KingBlack,
+    PawnBlack,
 
-export class Piece {
-    coordinate: Coordinate;
-
-    constructor(coordinate: Coordinate) {
-        this.coordinate = coordinate;
-    }
+    RookWhite,
+    KnightWhite,
+    BishopWhite,
+    QueenWhite,
+    KingWhite,
+    PawnWhite,
+    
+    Empty
 }

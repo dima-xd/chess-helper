@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Board } from '../beans/board';
 import { BoardUtils } from '../beans/board-utils';
-import { Tile } from '../beans/tile';
+import { Coordinate } from '../beans/coordinate';
+import { Piece } from '../beans/piece';
 
 @Component({
   selector: 'app-chess-board',
