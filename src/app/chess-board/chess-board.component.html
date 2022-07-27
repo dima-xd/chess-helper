@@ -1,23 +1,27 @@
 <div class="container">
-    <div class="row" style="display: inline;">
+    <div class="row board mt-5" style="display: inline-block;">
         <div class="col-xs-8 col-sm-4 col-md-5 col-lg-3 chess-grid">
             <div class="row" *ngFor="let tileI of board?.tiles; index as i">
                 <ng-container *ngFor="let tileJ of tileI; index as j">
                     <ng-container *ngIf="i%2 == 0">
-                        <div class="col-xs-1 col-sm-1 col-md-1"
-                             [style.background-color]="j%2 == 0 ? '#d4e0e5' : '#7a9cb1'" id="dropPiece" >
+                        <div class="col-xs-1 col-sm-1 col-md-1 tile"
+                            [style.background-color]="j%2 == 0 ? '#d4e0e5' : '#7a9cb1'" id="dropPiece" 
+                            cdkDropList (cdkDropListDropped)="drop($event)"
+                            [attr.coordinateI]="i" [attr.coordinateJ]="j">
                             <div
-                                class="piece piece-{{tileJ.piece}}" draggablePiece cdkDragBoundary=".container">
-                                
+                                class="piece piece-{{tileJ.piece}}" 
+                                *ngIf="tileJ.piece != 12" cdkDrag cdkDragBoundary=".board">
                             </div>
                         </div>
                     </ng-container>
                     <ng-container *ngIf="i%2 != 0">
-                        <div class="col-xs-1 col-sm-1 col-md-1" 
-                            [style.background-color]="j%2 == 0 ? '#7a9cb1' : '#d4e0e5'" id="dropPiece" >
+                        <div class="col-xs-1 col-sm-1 col-md-1 tile" 
+                            [style.background-color]="j%2 == 0 ? '#7a9cb1' : '#d4e0e5'" id="dropPiece" 
+                            cdkDropList (cdkDropListDropped)="drop($event)"
+                            [attr.coordinateI]="i" [attr.coordinateJ]="j" >
                             <div
-                                class="piece piece-{{tileJ.piece}}" draggablePiece cdkDragBoundary=".container">
-                                
+                                class="piece piece-{{tileJ.piece}}"
+                                *ngIf="tileJ.piece != 12" cdkDrag cdkDragBoundary=".board">
                             </div>
                         </div>
                     </ng-container>

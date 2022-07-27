@@ -1,91 +1,140 @@
-@media (max-width: 420px) {
+.chess-grid > .row {
+    min-width: 640px;
+}
+
+.tile {
+    width: 80px;
+    height: 80px;
+    padding: 0%;
+}
+
+@media screen and (max-width: 900px) {
     .chess-grid > .row {
-        width: 290px;
+        min-width: 520px;
     }
 
-    .chess-grid div.row div[class^="col-"] {
-        width: 36px;
-        height: 36px;
-    }
-
-    .chess-stat {
-        margin-top: 15px;
+    .tile {
+        width: 65px;
+        height: 65px;
+        padding: 0%;
     }
 }
 
-@media (min-width: 420px) {
-
+@media screen and (max-width: 540px) {
     .chess-grid > .row {
-        min-width: 650px;
+        min-width: 416px;
     }
 
-    .chess-grid div.row div[class^="col-"] {
+    .tile {
+        width: 52px;
+        height: 52px;
+        padding: 0%;
+    }
+}
+
+@media screen and (max-width: 438px) {
+    .chess-grid > .row {
+        min-width: 360px;
+    }
+
+    .tile {
+        width: 45px;
+        height: 45px;
+        padding: 0%;
+    }
+}
+
+@media screen and (max-width: 380px) {
+    .chess-grid > .row {
+        min-width: 320px;
+    }
+
+    .tile {
+        width: 40px;
+        height: 40px;
+        padding: 0%;
+    }
+}
+
+/* @media (min-width: 360px) {
+    .chess-grid > .row {
+        min-width: 400px;
+    }
+
+    .tile {
         width: 50px;
         height: 50px;
+        padding: 0%;
+    }
+}
+
+@media (min-width: 476px) {
+    .chess-grid > .row {
+        min-width: 432px;
     }
 
-    .chess-stat {
-        margin-top: 15px;
+    .tile {
+        width: 56.5px;
+        height: 56.5px;
+        padding: 0%;
+    }
+}
+
+@media (min-width: 500px) {
+    .chess-grid > .row {
+        min-width: 480px;
+    }
+
+    .tile {
+        width: 60px;
+        height: 60px;
+        padding: 0%;
+    }
+}
+
+@media (min-width: 578px) {
+    .chess-grid > .row {
+        min-width: 440px;
+    }
+
+    .tile {
+        width: 55px;
+        height: 55px;
+        padding: 0%;
     }
 }
 
 @media (min-width: 768px) {
-
-    .chess-grid div.row div[class^="col-"] {
-        width: 70px;
-        height: 70px;
+    .chess-grid > .row {
+        min-width: 560px;
     }
 
-    .chess-stat {
-           margin-top: 0 !important;
-       }
+    .tile {
+        width: 70px;
+        height: 70px;
+        padding: 0%;
+    }
 }
 
 @media (min-width: 992px) {
-
     .chess-grid > .row {
-        width: 450px;
+        width: 640px;
     }
 
-    .chess-grid div.row div[class^="col-"] {
+    .tile {
         width: 80px;
         height: 80px;
+        padding: 0%;
     }
 }
 
 @media (min-width: 1200px) {
-    .chess-grid div.row div[class^="col-"] {
+    .tile {
         width: 80px;
         height: 80px;
+        padding: 0%;
     }
-}
-
-.container .row {
-    box-sizing: border-box;
-    margin-left: 0;
-    margin-right: 0;
-}
-
-.container > .row > div[class^="col-"] {
-    padding: 0;
-}
-
-.container img {
-    max-height: 100%;
-    max-width: 100%;
-}
-
-.chess-grid .row {
-    margin-right: 0 !important;
-}
-
-.chess-grid .row div[class^="col-"] {
-    vertical-align: middle;
-    text-align: center;
-    padding: 0;
-    width: 90px;
-    height: 90px;
-}
+} */
 
 /*Black pieces */
 .piece-5 {
