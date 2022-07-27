@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Board } from '../beans/board';
 import { BoardUtils } from '../beans/board-utils';
-import { Coordinate } from '../beans/coordinate';
-import { Piece } from '../beans/piece';
+import { CdkDragDrop, CdkDragStart } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-chess-board',
@@ -18,5 +17,80 @@ export class ChessBoardComponent implements OnInit {
   ngOnInit(): void {
     this.board = new Board(BoardUtils.initBoard());
   }
+  
+  startMovingPiece(event: CdkDragStart) {
+    const source = event.source.element.nativeElement;
+    const pieceType = source.classList.item(2) //TODO: get with regex
+    const coordinateI = source.getAttribute('coordinateI'), coordinateJ = source.getAttribute('coordinateJ');
+    
+    this.initPossibleMoves(pieceType!, +coordinateI!, +coordinateJ!);
+  }
 
+  initPossibleMoves(pieceType: String, coordinateI: number, coordinateJ: number) {
+    switch (pieceType) {
+      case 'piece-0':
+      case 'piece-6': {
+          console.log('rook');
+          break;
+      }
+      case 'piece-1':
+      case 'piece-7': {
+          console.log('knight');
+          break;
+      }
+      case 'piece-2':
+      case 'piece-8': {
+          console.log('bishop');
+          break;
+      }
+      case 'piece-3':
+      case 'piece-9': {
+          console.log('queen');
+          break;
+      }
+      case 'piece-4':
+      case 'piece-10': {
+          console.log('king');
+          break;
+      }
+      case 'piece-5': {
+          console.log('black pawn');
+          break;
+      }
+      case 'piece-11': {
+          if (coordinateI == 6) {
+            console.log('white pawn');
+            document
+              .querySelector(".tile[coordinateI='" + (coordinateI-1) + "'][coordinateJ='" + coordinateJ + "']")
+              ?.classList.add('hint');
+            document
+              .querySelector(".tile[coordinateI='" + (coordinateI-2) + "'][coordinateJ='" + coordinateJ + "']")
+              ?.classList.add('hint');
+          }
+          break;
+      }
+    }
+  }
+
+  movePieceToTile() {
+    this.flushHints(undefined);
+  }
+
+  flushHints(event: any) {
+    //const tile = event.target as HTMLElement;
+    document.querySelectorAll(".tile.hint").forEach(item => {
+      item.classList.remove('hint');
+    });
+  }
+
+  getHints(event: MouseEvent) {
+    const tile = event.target as HTMLElement;
+
+    if (tile.classList.contains('piece')) {
+      const pieceType = tile.classList.item(2); //TODO: get with regex
+      const coordinateI = tile.getAttribute('coordinateI'), coordinateJ = tile.getAttribute('coordinateJ');
+
+      this.initPossibleMoves(pieceType!, +coordinateI!, +coordinateJ!);
+    }
+  }
 }

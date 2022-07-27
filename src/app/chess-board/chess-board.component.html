@@ -6,22 +6,28 @@
                     <ng-container *ngIf="i%2 == 0">
                         <div class="col-xs-1 col-sm-1 col-md-1 tile"
                             [style.background-color]="j%2 == 0 ? '#d4e0e5' : '#7a9cb1'" id="dropPiece" 
-                            cdkDropList (cdkDropListDropped)="drop($event)"
-                            [attr.coordinateI]="i" [attr.coordinateJ]="j">
+                            [attr.coordinateI]="i" [attr.coordinateJ]="j" (click)="flushHints($event)">
                             <div
                                 class="piece piece-{{tileJ.piece}}" 
-                                *ngIf="tileJ.piece != 12" cdkDrag cdkDragBoundary=".board">
+                                *ngIf="tileJ.piece != 12" cdkDrag cdkDragBoundary=".board" 
+                                #draggable="cdkDrag" [class.pointer-events-none]="draggable._dragRef.isDragging()"
+                                (cdkDragStarted)="startMovingPiece($event)"
+                                (cdkDragEnded)="movePieceToTile()" 
+                                [attr.coordinateI]="i" [attr.coordinateJ]="j" (click)="getHints($event)">
                             </div>
                         </div>
                     </ng-container>
                     <ng-container *ngIf="i%2 != 0">
                         <div class="col-xs-1 col-sm-1 col-md-1 tile" 
                             [style.background-color]="j%2 == 0 ? '#7a9cb1' : '#d4e0e5'" id="dropPiece" 
-                            cdkDropList (cdkDropListDropped)="drop($event)"
-                            [attr.coordinateI]="i" [attr.coordinateJ]="j" >
+                            [attr.coordinateI]="i" [attr.coordinateJ]="j" (click)="flushHints($event)">
                             <div
                                 class="piece piece-{{tileJ.piece}}"
-                                *ngIf="tileJ.piece != 12" cdkDrag cdkDragBoundary=".board">
+                                *ngIf="tileJ.piece != 12" cdkDrag cdkDragBoundary=".board" 
+                                #draggable="cdkDrag" [class.pointer-events-none]="draggable._dragRef.isDragging()"
+                                (cdkDragStarted)="startMovingPiece($event)"
+                                (cdkDragReleased)="movePieceToTile()" 
+                                [attr.coordinateI]="i" [attr.coordinateJ]="j" (click)="getHints($event)">
                             </div>
                         </div>
                     </ng-container>

@@ -119,3 +119,7 @@
     background-position: center;
     background-repeat: no-repeat;
 }
+
+.pointer-events-none {
+    pointer-events: none;
+}
