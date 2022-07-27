@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Board } from '../beans/board';
 import { BoardUtils } from '../beans/board-utils';
-import { CdkDragDrop, CdkDragStart } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragStart, CdkDragEnd } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-chess-board',
@@ -60,19 +60,35 @@ export class ChessBoardComponent implements OnInit {
       case 'piece-11': {
           if (coordinateI == 6) {
             console.log('white pawn');
-            document
-              .querySelector(".tile[coordinateI='" + (coordinateI-1) + "'][coordinateJ='" + coordinateJ + "']")
-              ?.classList.add('hint');
-            document
-              .querySelector(".tile[coordinateI='" + (coordinateI-2) + "'][coordinateJ='" + coordinateJ + "']")
-              ?.classList.add('hint');
+            this.addHintToTileByCoordinates(coordinateI-1, coordinateJ);
+            this.addHintToTileByCoordinates(coordinateI-2, coordinateJ);
+          } else {
+            this.addHintToTileByCoordinates(coordinateI-1, coordinateJ);
           }
           break;
       }
     }
   }
 
-  movePieceToTile() {
+  movePieceToTile(event: CdkDragEnd<any>) {
+    const dropTile = document.elementFromPoint(event.dropPoint.x, event.dropPoint.y);
+    const source = event.source.element.nativeElement;
+    const dropCoordinateI = dropTile?.getAttribute('coordinateI'), dropCoordinateJ = dropTile?.getAttribute('coordinateJ');
+
+    console.log(dropTile)
+    console.log(dropCoordinateI!, dropCoordinateJ!)
+
+    if (dropTile?.classList.contains('hint')) {
+      event.source._dragRef.reset();
+
+      source.setAttribute('coordinateI', dropCoordinateI!);
+      source.setAttribute('coordinateJ', dropCoordinateJ!);
+
+      dropTile.appendChild(source);
+    } else {
+      event.source._dragRef.reset();
+    }
+
     this.flushHints(undefined);
   }
 
@@ -93,4 +109,11 @@ export class ChessBoardComponent implements OnInit {
       this.initPossibleMoves(pieceType!, +coordinateI!, +coordinateJ!);
     }
   }
+
+  addHintToTileByCoordinates(coordinateI: number, coordinateJ: number) {
+    document
+      .querySelector(".tile[coordinateI='" + (coordinateI) + "'][coordinateJ='" + coordinateJ + "']")
+      ?.classList.add('hint');
+  }
+
 }

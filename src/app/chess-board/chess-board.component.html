@@ -12,7 +12,7 @@
                                 *ngIf="tileJ.piece != 12" cdkDrag cdkDragBoundary=".board" 
                                 #draggable="cdkDrag" [class.pointer-events-none]="draggable._dragRef.isDragging()"
                                 (cdkDragStarted)="startMovingPiece($event)"
-                                (cdkDragEnded)="movePieceToTile()" 
+                                (cdkDragEnded)="movePieceToTile($event)" 
                                 [attr.coordinateI]="i" [attr.coordinateJ]="j" (click)="getHints($event)">
                             </div>
                         </div>
@@ -26,7 +26,7 @@
                                 *ngIf="tileJ.piece != 12" cdkDrag cdkDragBoundary=".board" 
                                 #draggable="cdkDrag" [class.pointer-events-none]="draggable._dragRef.isDragging()"
                                 (cdkDragStarted)="startMovingPiece($event)"
-                                (cdkDragReleased)="movePieceToTile()" 
+                                (cdkDragEnded)="movePieceToTile($event)" 
                                 [attr.coordinateI]="i" [attr.coordinateJ]="j" (click)="getHints($event)">
                             </div>
                         </div>
