@@ -36,99 +36,9 @@ export class ChessBoardComponent implements OnInit {
     const source = event.source.element.nativeElement;
     const pieceTypeAttr = source.attributes.getNamedItem('pieceType');
     const pieceTypeValue = pieceTypeAttr?.value!;
-
-    // if (this.isWhitesTurn && this.whitePieces.includes(+pieceTypeValue)) {
-      
-    // }
     const coordinateI = source.getAttribute('coordinateI'), coordinateJ = source.getAttribute('coordinateJ');
-    
+
     this.initPossibleMoves(pieceTypeValue, +coordinateI!, +coordinateJ!);
-  }
-
-  initPossibleMoves(pieceType: String, coordinateI: number, coordinateJ: number) {
-    switch (pieceType) {
-      case String(Piece.RookBlack):
-      case String(Piece.RookWhite): {
-          console.log('rook');
-          for (let i = 0; i < 8; i++) {
-            this.addHintToTileByCoordinates(coordinateI, coordinateJ-i);
-            this.addHintToTileByCoordinates(coordinateI, coordinateJ+i);
-            this.addHintToTileByCoordinates(coordinateI-i, coordinateJ);
-            this.addHintToTileByCoordinates(coordinateI+i, coordinateJ);
-          }
-          break;
-      }
-      case String(Piece.KnightBlack):
-      case String(Piece.KnightWhite): {
-          console.log('knight');
-          this.addHintToTileByCoordinates(coordinateI+2, coordinateJ-1);
-          this.addHintToTileByCoordinates(coordinateI+1, coordinateJ-2);
-          this.addHintToTileByCoordinates(coordinateI+2, coordinateJ+1);
-          this.addHintToTileByCoordinates(coordinateI+1, coordinateJ+2);
-          this.addHintToTileByCoordinates(coordinateI-1, coordinateJ-2);
-          this.addHintToTileByCoordinates(coordinateI-2, coordinateJ-1);
-          this.addHintToTileByCoordinates(coordinateI-2, coordinateJ+1);
-          this.addHintToTileByCoordinates(coordinateI-1, coordinateJ+2);
-          break;
-      }
-      case String(Piece.BishopBlack):
-      case String(Piece.BishopWhite): {
-          console.log('bishop');
-          for (let i = 0; i < 8; i++) {
-            this.addHintToTileByCoordinates(coordinateI-i, coordinateJ-i);
-            this.addHintToTileByCoordinates(coordinateI-i, coordinateJ+i);
-            this.addHintToTileByCoordinates(coordinateI+i, coordinateJ+i);
-            this.addHintToTileByCoordinates(coordinateI+i, coordinateJ-i);
-          }
-          break;
-      }
-      case String(Piece.QueenBlack):
-      case String(Piece.QueenWhite): {
-          console.log('queen');
-          for (let i = 0; i < 8; i++) {
-            this.addHintToTileByCoordinates(coordinateI, coordinateJ-i);
-            this.addHintToTileByCoordinates(coordinateI, coordinateJ+i);
-            this.addHintToTileByCoordinates(coordinateI-i, coordinateJ);
-            this.addHintToTileByCoordinates(coordinateI+i, coordinateJ);
-
-            this.addHintToTileByCoordinates(coordinateI-i, coordinateJ-i);
-            this.addHintToTileByCoordinates(coordinateI-i, coordinateJ+i);
-            this.addHintToTileByCoordinates(coordinateI+i, coordinateJ+i);
-            this.addHintToTileByCoordinates(coordinateI+i, coordinateJ-i);
-          }
-          break;
-      }
-      case String(Piece.KingBlack):
-      case String(Piece.KingWhite): {
-          console.log('king');
-          this.addHintToTileByCoordinates(coordinateI+1, coordinateJ-1);
-          this.addHintToTileByCoordinates(coordinateI, coordinateJ-1);
-          this.addHintToTileByCoordinates(coordinateI-1, coordinateJ-1);
-          this.addHintToTileByCoordinates(coordinateI-1, coordinateJ);
-          this.addHintToTileByCoordinates(coordinateI-1, coordinateJ+1);
-          this.addHintToTileByCoordinates(coordinateI, coordinateJ+1);
-          this.addHintToTileByCoordinates(coordinateI+1, coordinateJ+1);
-          this.addHintToTileByCoordinates(coordinateI+1, coordinateJ);
-          break;
-      }
-      case String(Piece.PawnBlack): {
-          if (coordinateI == 1) {
-            console.log('black pawn');          
-            this.addHintToTileByCoordinates(coordinateI+2, coordinateJ);
-          }
-          this.addHintToTileByCoordinates(coordinateI+1, coordinateJ);
-          break;
-      }
-      case String(Piece.PawnWhite): {
-          if (coordinateI == 6) {
-            console.log('white pawn');
-            this.addHintToTileByCoordinates(coordinateI-2, coordinateJ);
-          }
-          this.addHintToTileByCoordinates(coordinateI-1, coordinateJ);
-          break;
-      }
-    }
-    this.isFlushed = false
   }
 
   movePieceToTile(event: CdkDragEnd<any>) {
@@ -187,6 +97,141 @@ export class ChessBoardComponent implements OnInit {
     document
       .querySelector(".tile[coordinateI='" + (coordinateI) + "'][coordinateJ='" + coordinateJ + "']")
       ?.classList.add('hint');
+  }
+
+  initPossibleMoves(pieceType: String, coordinateI: number, coordinateJ: number) {
+    if (this.isWhitesTurn && this.whitePieces.includes(+pieceType)) {
+      console.log('white turn');
+      switch (pieceType) {
+        case String(Piece.RookWhite): {
+          console.log('white rook');
+          this.initRookMoves(coordinateI, coordinateJ);
+          break;
+        }
+        case String(Piece.KnightWhite): {
+          console.log('white knight');
+          this.initKnightMoves(coordinateI, coordinateJ);
+          break;
+        }
+        case String(Piece.BishopWhite): {
+          console.log('white bishop');
+          this.initBishopMoves(coordinateI, coordinateJ);
+          break;
+        }
+        case String(Piece.QueenWhite): {
+          console.log('white quuen');
+          this.initQueenMoves(coordinateI, coordinateJ);
+          break;
+        }
+        case String(Piece.KingWhite): {
+          console.log('white king');
+          this.initKingMoves(coordinateI, coordinateJ);
+          break;
+        }
+        case String(Piece.PawnWhite): {
+          if (coordinateI == 6) {
+            console.log('white pawn');
+            this.addHintToTileByCoordinates(coordinateI-2, coordinateJ);
+          }
+          this.addHintToTileByCoordinates(coordinateI-1, coordinateJ);
+          break;
+        }
+      }
+      this.isWhitesTurn = !this.isWhitesTurn;
+    } else if (!this.isWhitesTurn && this.blackPieces.includes(+pieceType)) {
+      console.log('black turn');
+      switch (pieceType) {
+        case String(Piece.RookBlack): {
+          console.log('black rook');
+          this.initRookMoves(coordinateI, coordinateJ);
+          break;
+        }
+        case String(Piece.KnightBlack): {
+          console.log('black knight');
+          this.initKnightMoves(coordinateI, coordinateJ);
+          break;
+        }
+        case String(Piece.BishopBlack): {
+          console.log('black bishop');
+          this.initBishopMoves(coordinateI, coordinateJ);
+          break;
+        }
+        case String(Piece.QueenBlack): {
+          console.log('black quuen');
+          this.initQueenMoves(coordinateI, coordinateJ);
+          break;
+        }
+        case String(Piece.KingBlack): {
+          console.log('black king');
+          this.initKingMoves(coordinateI, coordinateJ);
+          break;
+        }
+        case String(Piece.PawnBlack): {
+          if (coordinateI == 1) {
+            console.log('black pawn');          
+            this.addHintToTileByCoordinates(coordinateI+2, coordinateJ);
+          }
+          this.addHintToTileByCoordinates(coordinateI+1, coordinateJ);
+          break;
+        }
+      }
+      this.isWhitesTurn = !this.isWhitesTurn;
+    }
+    this.isFlushed = false
+  }
+
+  initRookMoves(coordinateI: number, coordinateJ: number) {
+    for (let i = 0; i < 8; i++) {
+      this.addHintToTileByCoordinates(coordinateI, coordinateJ-i);
+      this.addHintToTileByCoordinates(coordinateI, coordinateJ+i);
+      this.addHintToTileByCoordinates(coordinateI-i, coordinateJ);
+      this.addHintToTileByCoordinates(coordinateI+i, coordinateJ);
+    }
+  }
+
+  initKnightMoves(coordinateI: number, coordinateJ: number) {
+    this.addHintToTileByCoordinates(coordinateI+2, coordinateJ-1);
+    this.addHintToTileByCoordinates(coordinateI+1, coordinateJ-2);
+    this.addHintToTileByCoordinates(coordinateI+2, coordinateJ+1);
+    this.addHintToTileByCoordinates(coordinateI+1, coordinateJ+2);
+    this.addHintToTileByCoordinates(coordinateI-1, coordinateJ-2);
+    this.addHintToTileByCoordinates(coordinateI-2, coordinateJ-1);
+    this.addHintToTileByCoordinates(coordinateI-2, coordinateJ+1);
+    this.addHintToTileByCoordinates(coordinateI-1, coordinateJ+2);
+  }
+
+  initBishopMoves(coordinateI: number, coordinateJ: number) {
+    for (let i = 0; i < 8; i++) {
+      this.addHintToTileByCoordinates(coordinateI-i, coordinateJ-i);
+      this.addHintToTileByCoordinates(coordinateI-i, coordinateJ+i);
+      this.addHintToTileByCoordinates(coordinateI+i, coordinateJ+i);
+      this.addHintToTileByCoordinates(coordinateI+i, coordinateJ-i);
+    }
+  }
+
+  initQueenMoves(coordinateI: number, coordinateJ: number) {
+    for (let i = 0; i < 8; i++) {
+      this.addHintToTileByCoordinates(coordinateI, coordinateJ-i);
+      this.addHintToTileByCoordinates(coordinateI, coordinateJ+i);
+      this.addHintToTileByCoordinates(coordinateI-i, coordinateJ);
+      this.addHintToTileByCoordinates(coordinateI+i, coordinateJ);
+
+      this.addHintToTileByCoordinates(coordinateI-i, coordinateJ-i);
+      this.addHintToTileByCoordinates(coordinateI-i, coordinateJ+i);
+      this.addHintToTileByCoordinates(coordinateI+i, coordinateJ+i);
+      this.addHintToTileByCoordinates(coordinateI+i, coordinateJ-i);
+    }
+  }
+
+  initKingMoves(coordinateI: number, coordinateJ: number) {
+    this.addHintToTileByCoordinates(coordinateI+1, coordinateJ-1);
+    this.addHintToTileByCoordinates(coordinateI, coordinateJ-1);
+    this.addHintToTileByCoordinates(coordinateI-1, coordinateJ-1);
+    this.addHintToTileByCoordinates(coordinateI-1, coordinateJ);
+    this.addHintToTileByCoordinates(coordinateI-1, coordinateJ+1);
+    this.addHintToTileByCoordinates(coordinateI, coordinateJ+1);
+    this.addHintToTileByCoordinates(coordinateI+1, coordinateJ+1);
+    this.addHintToTileByCoordinates(coordinateI+1, coordinateJ);
   }
 
 }
