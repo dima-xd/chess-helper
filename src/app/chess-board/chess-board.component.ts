@@ -51,6 +51,7 @@ export class ChessBoardComponent implements OnInit {
       source.setAttribute('coordinateJ', dropCoordinateJ!);
 
       dropTile.appendChild(source);
+      this.isWhitesTurn = !this.isWhitesTurn;
     }
     event.source._dragRef.reset();
 
@@ -99,6 +100,12 @@ export class ChessBoardComponent implements OnInit {
       ?.classList.add('hint');
   }
 
+  deleteHintInTileByCoordinates(coordinateI: number, coordinateJ: number) {
+    document
+      .querySelector(".tile[coordinateI='" + (coordinateI) + "'][coordinateJ='" + coordinateJ + "']")
+      ?.classList.remove('hint');
+  }
+
   initPossibleMoves(pieceType: String, coordinateI: number, coordinateJ: number) {
     if (this.isWhitesTurn && this.whitePieces.includes(+pieceType)) {
       console.log('white turn');
@@ -137,7 +144,6 @@ export class ChessBoardComponent implements OnInit {
           break;
         }
       }
-      this.isWhitesTurn = !this.isWhitesTurn;
     } else if (!this.isWhitesTurn && this.blackPieces.includes(+pieceType)) {
       console.log('black turn');
       switch (pieceType) {
@@ -175,13 +181,12 @@ export class ChessBoardComponent implements OnInit {
           break;
         }
       }
-      this.isWhitesTurn = !this.isWhitesTurn;
     }
     this.isFlushed = false
   }
 
   initRookMoves(coordinateI: number, coordinateJ: number) {
-    for (let i = 0; i < 8; i++) {
+    for (let i = 1; i < 8; i++) {
       this.addHintToTileByCoordinates(coordinateI, coordinateJ-i);
       this.addHintToTileByCoordinates(coordinateI, coordinateJ+i);
       this.addHintToTileByCoordinates(coordinateI-i, coordinateJ);
@@ -201,7 +206,7 @@ export class ChessBoardComponent implements OnInit {
   }
 
   initBishopMoves(coordinateI: number, coordinateJ: number) {
-    for (let i = 0; i < 8; i++) {
+    for (let i = 1; i < 8; i++) {
       this.addHintToTileByCoordinates(coordinateI-i, coordinateJ-i);
       this.addHintToTileByCoordinates(coordinateI-i, coordinateJ+i);
       this.addHintToTileByCoordinates(coordinateI+i, coordinateJ+i);
@@ -210,7 +215,7 @@ export class ChessBoardComponent implements OnInit {
   }
 
   initQueenMoves(coordinateI: number, coordinateJ: number) {
-    for (let i = 0; i < 8; i++) {
+    for (let i = 1; i < 8; i++) {
       this.addHintToTileByCoordinates(coordinateI, coordinateJ-i);
       this.addHintToTileByCoordinates(coordinateI, coordinateJ+i);
       this.addHintToTileByCoordinates(coordinateI-i, coordinateJ);
