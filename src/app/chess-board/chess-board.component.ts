@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Board } from '../beans/board';
 import { BoardUtils } from '../beans/board-utils';
 import { CdkDragDrop, CdkDragStart, CdkDragEnd } from '@angular/cdk/drag-drop';
+import { Piece } from '../beans/piece';
 
 @Component({
   selector: 'app-chess-board',
@@ -12,8 +13,18 @@ export class ChessBoardComponent implements OnInit {
 
   board: Board | undefined;
 
+  private whitePieces: Piece[] = [
+    Piece.RookWhite, Piece.KnightWhite, Piece.BishopWhite, 
+    Piece.QueenWhite, Piece.KingWhite, Piece.PawnWhite
+  ];
+  private blackPieces: Piece[] = [
+    Piece.RookBlack, Piece.KnightBlack, Piece.BishopBlack, 
+    Piece.QueenBlack, Piece.KingBlack, Piece.PawnBlack
+  ];
+
   private isPieceClicked = false;
   private isFlushed = false;
+  private isWhitesTurn = true;
 
   constructor() { }
 
@@ -23,16 +34,21 @@ export class ChessBoardComponent implements OnInit {
   
   startMovingPiece(event: CdkDragStart) {
     const source = event.source.element.nativeElement;
-    const pieceType = source.classList.item(2) //TODO: get with regex
+    const pieceTypeAttr = source.attributes.getNamedItem('pieceType');
+    const pieceTypeValue = pieceTypeAttr?.value!;
+
+    // if (this.isWhitesTurn && this.whitePieces.includes(+pieceTypeValue)) {
+      
+    // }
     const coordinateI = source.getAttribute('coordinateI'), coordinateJ = source.getAttribute('coordinateJ');
     
-    this.initPossibleMoves(pieceType!, +coordinateI!, +coordinateJ!);
+    this.initPossibleMoves(pieceTypeValue, +coordinateI!, +coordinateJ!);
   }
 
   initPossibleMoves(pieceType: String, coordinateI: number, coordinateJ: number) {
     switch (pieceType) {
-      case 'piece-0':
-      case 'piece-6': {
+      case String(Piece.RookBlack):
+      case String(Piece.RookWhite): {
           console.log('rook');
           for (let i = 0; i < 8; i++) {
             this.addHintToTileByCoordinates(coordinateI, coordinateJ-i);
@@ -42,8 +58,8 @@ export class ChessBoardComponent implements OnInit {
           }
           break;
       }
-      case 'piece-1':
-      case 'piece-7': {
+      case String(Piece.KnightBlack):
+      case String(Piece.KnightWhite): {
           console.log('knight');
           this.addHintToTileByCoordinates(coordinateI+2, coordinateJ-1);
           this.addHintToTileByCoordinates(coordinateI+1, coordinateJ-2);
@@ -55,8 +71,8 @@ export class ChessBoardComponent implements OnInit {
           this.addHintToTileByCoordinates(coordinateI-1, coordinateJ+2);
           break;
       }
-      case 'piece-2':
-      case 'piece-8': {
+      case String(Piece.BishopBlack):
+      case String(Piece.BishopWhite): {
           console.log('bishop');
           for (let i = 0; i < 8; i++) {
             this.addHintToTileByCoordinates(coordinateI-i, coordinateJ-i);
@@ -66,8 +82,8 @@ export class ChessBoardComponent implements OnInit {
           }
           break;
       }
-      case 'piece-3':
-      case 'piece-9': {
+      case String(Piece.QueenBlack):
+      case String(Piece.QueenWhite): {
           console.log('queen');
           for (let i = 0; i < 8; i++) {
             this.addHintToTileByCoordinates(coordinateI, coordinateJ-i);
@@ -82,8 +98,8 @@ export class ChessBoardComponent implements OnInit {
           }
           break;
       }
-      case 'piece-4':
-      case 'piece-10': {
+      case String(Piece.KingBlack):
+      case String(Piece.KingWhite): {
           console.log('king');
           this.addHintToTileByCoordinates(coordinateI+1, coordinateJ-1);
           this.addHintToTileByCoordinates(coordinateI, coordinateJ-1);
@@ -95,7 +111,7 @@ export class ChessBoardComponent implements OnInit {
           this.addHintToTileByCoordinates(coordinateI+1, coordinateJ);
           break;
       }
-      case 'piece-5': {
+      case String(Piece.PawnBlack): {
           if (coordinateI == 1) {
             console.log('black pawn');          
             this.addHintToTileByCoordinates(coordinateI+2, coordinateJ);
@@ -103,7 +119,7 @@ export class ChessBoardComponent implements OnInit {
           this.addHintToTileByCoordinates(coordinateI+1, coordinateJ);
           break;
       }
-      case 'piece-11': {
+      case String(Piece.PawnWhite): {
           if (coordinateI == 6) {
             console.log('white pawn');
             this.addHintToTileByCoordinates(coordinateI-2, coordinateJ);
@@ -156,10 +172,10 @@ export class ChessBoardComponent implements OnInit {
       const tile = event.target as HTMLElement;
 
       if (tile.classList.contains('piece')) {
-        const pieceType = tile.classList.item(2); //TODO: get with regex
+        const pieceType = tile.attributes.getNamedItem('pieceType');
         const coordinateI = tile.getAttribute('coordinateI'), coordinateJ = tile.getAttribute('coordinateJ');
 
-        this.initPossibleMoves(pieceType!, +coordinateI!, +coordinateJ!);
+        this.initPossibleMoves(pieceType?.value!, +coordinateI!, +coordinateJ!);
       }
     } else if(!this.isFlushed) {
       this.flushHints(undefined);

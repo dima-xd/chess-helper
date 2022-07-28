@@ -13,7 +13,8 @@
                                 #draggable="cdkDrag" [class.pointer-events-none]="draggable._dragRef.isDragging()"
                                 (cdkDragStarted)="startMovingPiece($event)"
                                 (cdkDragEnded)="movePieceToTile($event)" 
-                                [attr.coordinateI]="i" [attr.coordinateJ]="j" (click)="getHints($event)">
+                                [attr.coordinateI]="i" [attr.coordinateJ]="j" [attr.pieceType]="tileJ.piece"
+                                (click)="getHints($event)">
                             </div>
                         </div>
                     </ng-container>
@@ -27,7 +28,8 @@
                                 #draggable="cdkDrag" [class.pointer-events-none]="draggable._dragRef.isDragging()"
                                 (cdkDragStarted)="startMovingPiece($event)"
                                 (cdkDragEnded)="movePieceToTile($event)" 
-                                [attr.coordinateI]="i" [attr.coordinateJ]="j" (click)="getHints($event)">
+                                [attr.coordinateI]="i" [attr.coordinateJ]="j" [attr.pieceType]="tileJ.piece"
+                                (click)="getHints($event)">
                             </div>
                         </div>
                     </ng-container>
