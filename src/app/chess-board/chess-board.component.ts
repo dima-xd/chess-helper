@@ -3,6 +3,7 @@ import { Board } from '../beans/board';
 import { BoardUtils } from '../beans/board-utils';
 import { CdkDragDrop, CdkDragStart, CdkDragEnd } from '@angular/cdk/drag-drop';
 import { Piece } from '../beans/piece';
+import { Coordinate } from '../beans/coordinate';
 
 @Component({
   selector: 'app-chess-board',
@@ -94,16 +95,23 @@ export class ChessBoardComponent implements OnInit {
     this.isPieceClicked = true;
   }
 
-  addHintToTileByCoordinates(coordinateI: number, coordinateJ: number) {
-    document
-      .querySelector(".tile[coordinateI='" + (coordinateI) + "'][coordinateJ='" + coordinateJ + "']")
-      ?.classList.add('hint');
+  addHintToTileByCoordinates(coordinateI: number, coordinateJ: number): boolean {
+    const tile = this.getTileAtCoordinates(coordinateI, coordinateJ);
+    if (tile?.childElementCount == 0) {
+      tile?.classList.add('hint');
+      return true;
+    }
+    return false;
   }
 
-  deleteHintInTileByCoordinates(coordinateI: number, coordinateJ: number) {
-    document
-      .querySelector(".tile[coordinateI='" + (coordinateI) + "'][coordinateJ='" + coordinateJ + "']")
-      ?.classList.remove('hint');
+  getPieceAtCoordinates(coordinateI: number, coordinateJ: number): Element | null {
+    const piece = document.querySelector(".piece[coordinateI='" + coordinateI + "'][coordinateJ='" + coordinateJ + "']");
+    return piece;
+  }
+  
+  getTileAtCoordinates(coordinateI: number, coordinateJ: number): Element | null {
+    const tile = document.querySelector(".tile[coordinateI='" + coordinateI + "'][coordinateJ='" + coordinateJ + "']");
+    return tile;
   }
 
   initPossibleMoves(pieceType: String, coordinateI: number, coordinateJ: number) {
@@ -187,10 +195,24 @@ export class ChessBoardComponent implements OnInit {
 
   initRookMoves(coordinateI: number, coordinateJ: number) {
     for (let i = 1; i < 8; i++) {
-      this.addHintToTileByCoordinates(coordinateI, coordinateJ-i);
-      this.addHintToTileByCoordinates(coordinateI, coordinateJ+i);
-      this.addHintToTileByCoordinates(coordinateI-i, coordinateJ);
-      this.addHintToTileByCoordinates(coordinateI+i, coordinateJ);
+      if (!this.addHintToTileByCoordinates(coordinateI, coordinateJ-i)) {
+        break;
+      }
+    }
+    for (let i = 1; i < 8; i++) {
+      if (!this.addHintToTileByCoordinates(coordinateI, coordinateJ+i)) {
+        break;
+      }
+    }
+    for (let i = 1; i < 8; i++) {
+      if (!this.addHintToTileByCoordinates(coordinateI-i, coordinateJ)) {
+        break;
+      }
+    }
+    for (let i = 1; i < 8; i++) {
+      if (!this.addHintToTileByCoordinates(coordinateI+i, coordinateJ)) {
+        break;
+      }
     }
   }
 
@@ -207,24 +229,67 @@ export class ChessBoardComponent implements OnInit {
 
   initBishopMoves(coordinateI: number, coordinateJ: number) {
     for (let i = 1; i < 8; i++) {
-      this.addHintToTileByCoordinates(coordinateI-i, coordinateJ-i);
-      this.addHintToTileByCoordinates(coordinateI-i, coordinateJ+i);
-      this.addHintToTileByCoordinates(coordinateI+i, coordinateJ+i);
-      this.addHintToTileByCoordinates(coordinateI+i, coordinateJ-i);
+      if (!this.addHintToTileByCoordinates(coordinateI-i, coordinateJ-i)) {
+        break;
+      }
+    }
+    for (let i = 1; i < 8; i++) {
+      if (!this.addHintToTileByCoordinates(coordinateI-i, coordinateJ+i)) {
+        break;
+      }
+    }
+    for (let i = 1; i < 8; i++) {
+      if (!this.addHintToTileByCoordinates(coordinateI+i, coordinateJ+i)) {
+        break;
+      }
+    }
+    for (let i = 1; i < 8; i++) {
+      if (!this.addHintToTileByCoordinates(coordinateI+i, coordinateJ-i)) {
+        break;
+      }
     }
   }
 
   initQueenMoves(coordinateI: number, coordinateJ: number) {
     for (let i = 1; i < 8; i++) {
-      this.addHintToTileByCoordinates(coordinateI, coordinateJ-i);
-      this.addHintToTileByCoordinates(coordinateI, coordinateJ+i);
-      this.addHintToTileByCoordinates(coordinateI-i, coordinateJ);
-      this.addHintToTileByCoordinates(coordinateI+i, coordinateJ);
-
-      this.addHintToTileByCoordinates(coordinateI-i, coordinateJ-i);
-      this.addHintToTileByCoordinates(coordinateI-i, coordinateJ+i);
-      this.addHintToTileByCoordinates(coordinateI+i, coordinateJ+i);
-      this.addHintToTileByCoordinates(coordinateI+i, coordinateJ-i);
+      if (!this.addHintToTileByCoordinates(coordinateI, coordinateJ-i)) {
+        break;
+      }
+    }
+    for (let i = 1; i < 8; i++) {
+      if (!this.addHintToTileByCoordinates(coordinateI, coordinateJ+i)) {
+        break;
+      }
+    }
+    for (let i = 1; i < 8; i++) {
+      if (!this.addHintToTileByCoordinates(coordinateI-i, coordinateJ)) {
+        break;
+      }
+    }
+    for (let i = 1; i < 8; i++) {
+      if (!this.addHintToTileByCoordinates(coordinateI+i, coordinateJ)) {
+        break;
+      }
+    }
+    for (let i = 1; i < 8; i++) {
+      if (!this.addHintToTileByCoordinates(coordinateI-i, coordinateJ-i)) {
+        break;
+      }
+    }
+    for (let i = 1; i < 8; i++) {
+      if (!this.addHintToTileByCoordinates(coordinateI-i, coordinateJ+i)) {
+        break;
+      }
+    }
+    for (let i = 1; i < 8; i++) {
+      if (!this.addHintToTileByCoordinates(coordinateI+i, coordinateJ+i)) {
+        break;
+      }
+    }
+    for (let i = 1; i < 8; i++) {
+      if (!this.addHintToTileByCoordinates(coordinateI+i, coordinateJ-i)) {
+        break;
+      }
     }
   }
 
