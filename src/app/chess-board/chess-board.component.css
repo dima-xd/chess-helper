@@ -123,3 +123,7 @@
 .pointer-events-none {
     pointer-events: none;
 }
+
+.attack {
+    background-color: red !important;
+}
