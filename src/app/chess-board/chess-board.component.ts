@@ -53,6 +53,17 @@ export class ChessBoardComponent implements OnInit {
 
       dropTile.appendChild(source);
       this.isWhitesTurn = !this.isWhitesTurn;
+    } else if (dropTile?.parentElement?.classList.contains('attack')) {
+      const parentTile = dropTile.parentElement;
+      const parentCoordinateI = parentTile?.getAttribute('coordinateI'), parentCoordinateJ = parentTile?.getAttribute('coordinateJ');
+
+      source.setAttribute('coordinateI', parentCoordinateI!);
+      source.setAttribute('coordinateJ', parentCoordinateJ!);
+
+      dropTile.remove();
+      parentTile.appendChild(source);
+
+      this.isWhitesTurn = !this.isWhitesTurn;
     }
     event.source._dragRef.reset();
 
