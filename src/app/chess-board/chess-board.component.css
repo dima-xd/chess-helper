@@ -107,12 +107,13 @@
 }
 
 .piece {
+    cursor: grab;
     transform: translate(0px, 7px);
     background-position: center;
     background-repeat: no-repeat;
     width: 100%;
     height: 82%;
-}
+}  
 
 .hint {
     background-image: url('../../assets/chess-board/hint.svg');

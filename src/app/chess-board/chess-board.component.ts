@@ -26,6 +26,7 @@ export class ChessBoardComponent implements OnInit {
   private isPieceClicked = false;
   private isFlushed = false;
   private isWhitesTurn = true;
+  private isChecked = false;
 
   constructor() { }
 
@@ -34,6 +35,8 @@ export class ChessBoardComponent implements OnInit {
   }
   
   startMovingPiece(event: CdkDragStart) {
+    document.body.style.cursor = 'grabbing'; 
+
     const source = event.source.element.nativeElement;
     const pieceTypeAttr = source.attributes.getNamedItem('pieceType');
     const pieceTypeValue = pieceTypeAttr?.value!;
@@ -43,6 +46,8 @@ export class ChessBoardComponent implements OnInit {
   }
 
   movePieceToTile(event: CdkDragEnd<any>) {
+    document.body.style.removeProperty('cursor');
+
     const dropTile = document.elementFromPoint(event.dropPoint.x, event.dropPoint.y);
     const source = event.source.element.nativeElement;
     const dropCoordinateI = dropTile?.getAttribute('coordinateI'), dropCoordinateJ = dropTile?.getAttribute('coordinateJ');
@@ -53,17 +58,20 @@ export class ChessBoardComponent implements OnInit {
 
       dropTile.appendChild(source);
       this.isWhitesTurn = !this.isWhitesTurn;
-    } else if (dropTile?.parentElement?.classList.contains('attack')) {
-      const parentTile = dropTile.parentElement;
-      const parentCoordinateI = parentTile?.getAttribute('coordinateI'), parentCoordinateJ = parentTile?.getAttribute('coordinateJ');
-
-      source.setAttribute('coordinateI', parentCoordinateI!);
-      source.setAttribute('coordinateJ', parentCoordinateJ!);
-
-      dropTile.remove();
-      parentTile.appendChild(source);
-
-      this.isWhitesTurn = !this.isWhitesTurn;
+    } else {
+      const parentTile = dropTile?.parentElement;
+      if (parentTile?.classList.contains('attack') && 
+          !(dropTile?.classList.contains('piece-10') || dropTile?.classList.contains('piece-4'))) {
+        const parentCoordinateI = parentTile?.getAttribute('coordinateI'), parentCoordinateJ = parentTile?.getAttribute('coordinateJ');
+  
+        source.setAttribute('coordinateI', parentCoordinateI!);
+        source.setAttribute('coordinateJ', parentCoordinateJ!);
+  
+        dropTile?.remove();
+        parentTile.appendChild(source);
+  
+        this.isWhitesTurn = !this.isWhitesTurn;
+      }
     }
     event.source._dragRef.reset();
 
@@ -104,7 +112,11 @@ export class ChessBoardComponent implements OnInit {
         const pieceType = tile.attributes.getNamedItem('pieceType');
         const coordinateI = tile.getAttribute('coordinateI'), coordinateJ = tile.getAttribute('coordinateJ');
 
-        this.initPossibleMoves(pieceType?.value!, +coordinateI!, +coordinateJ!);
+        if (!this.isChecked) {
+          this.initPossibleMoves(pieceType?.value!, +coordinateI!, +coordinateJ!);
+        } else {
+          this.initPossibleMovesWhileChecked(pieceType?.value!, +coordinateI!, +coordinateJ!);
+        }
       }
     } else if(!this.isFlushed) {
       this.flushHints(undefined);
@@ -225,6 +237,18 @@ export class ChessBoardComponent implements OnInit {
       }
     }
     this.isFlushed = false
+  }
+
+  initPossibleMovesWhileChecked(pieceType: String, coordinateI: number, coordinateJ: number) {
+    if (this.isWhitesTurn) {
+      if (pieceType == String(Piece.KingWhite)) {
+        this.initKingMoves(coordinateI, coordinateJ);
+      }
+    } else {
+      if (pieceType == String(Piece.BishopBlack)) {
+        this.initKingMoves(coordinateI, coordinateJ);
+      }
+    }
   }
 
   initAttack(coordinateI: number, coordinateJ: number) {
